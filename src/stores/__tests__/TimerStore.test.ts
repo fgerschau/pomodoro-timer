@@ -19,7 +19,7 @@ describe('TimerStore', () => {
   it('starts, pauses, resumes and resets the timer', () => {
     const initialValue = 25 * 60 * 1000;
     jest.useFakeTimers();
-    const timer  = new TimerStore();
+    const timer = new TimerStore();
     expect(timer.timeLeft).toBe(initialValue);
 
     timer.startTimer();
@@ -42,5 +42,13 @@ describe('TimerStore', () => {
     jest.advanceTimersByTime(2 * 60 * 1000);
     expect(timer.running).toBe(false);
     expect(timer.timeLeft).toBe(initialValue);
+  });
+
+  it('doesn\'t show 60s', () => {
+    jest.useFakeTimers();
+    const timer = new TimerStore();
+    timer.startTimer();
+    jest.advanceTimersByTime(100);
+    expect(timer.timeLeftFormatted).toBe('25:00');
   });
 });

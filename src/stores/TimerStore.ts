@@ -11,9 +11,15 @@ class TimerStore {
   }
 
   @computed get timeLeftFormatted() {
-    const hours = Math.floor(this.timeLeft / 60 / 1000);
-    const minutes = `0${((this.timeLeft % 60000) / 1000).toFixed(0)}`.slice(-2);
-    return `${hours}:${minutes}`;
+    let minutes = Math.floor(this.timeLeft / 60 / 1000);
+    let seconds = (this.timeLeft % 60000) / 1000;
+    if (seconds.toFixed(0) === '60') {
+      minutes++;
+      seconds = 0;
+    }
+
+    const formattedSeconds = `0${seconds.toFixed(0)}`.slice(-2);
+    return `${minutes}:${formattedSeconds}`;
   }
 
   @action startTimer() {
