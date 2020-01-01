@@ -75,4 +75,14 @@ describe('TimerStore', () => {
     expect(vibrateMock).toHaveBeenCalledTimes(1);
     jest.resetAllMocks();
   });
+
+  it('sets the correct time (pause/pomodoro) when resetting timer', () => {
+    const timer = new TimerStore();
+    timer.resetTimer('break');
+    expect(timer.timeLeft).toBe(5 * 60 * 1000);
+    expect(timer.timerState).toBe('break');
+    timer.resetTimer('pomodoro');
+    expect(timer.timeLeft).toBe(25 * 60 * 1000);
+    expect(timer.timerState).toBe('pomodoro');
+  });
 });

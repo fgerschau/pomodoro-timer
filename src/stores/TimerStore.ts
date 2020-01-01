@@ -1,10 +1,17 @@
 import { observable, action, computed } from 'mobx';
 import {emitAlertNoise} from '../utils';
 
+type ITimerState = 'break' | 'pomodoro';
+
 class TimerStore {
   private timerId: number = 0;
-  @observable public running: boolean = false;
+
+  @observable public timerState: ITimerState = 'pomodoro';
   @observable public pomodoroLength: number = 25 * 60 * 1000;
+  @observable public breakLength: number = 5 * 60 * 1000;
+
+  @observable public running: boolean = false;
+
   @observable public timeLeft: number = this.pomodoroLength;
 
   @action setMsLeft(ms: number) {
@@ -43,10 +50,11 @@ class TimerStore {
     clearInterval(this.timerId);
   }
 
-  @action resetTimer() {
+  @action resetTimer(state?: ITimerState) {
     this.running = false;
     clearInterval(this.timerId);
-    this.timeLeft = this.pomodoroLength;
+    this.timerState = state ?? this.timerState;
+    this.timeLeft = this.timerState === 'pomodoro' ? this.pomodoroLength : this.breakLength;
   }
 }
 
