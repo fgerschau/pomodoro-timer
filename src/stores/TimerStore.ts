@@ -1,4 +1,5 @@
 import { observable, action, computed } from 'mobx';
+import {emitAlertNoise} from '../utils';
 
 class TimerStore {
   private timerId: number = 0;
@@ -25,7 +26,15 @@ class TimerStore {
   @action startTimer() {
     this.running = true;
     this.timerId = window.setInterval(() => {
-      this.timeLeft = this.timeLeft - 100;
+      const newTimeLeft = this.timeLeft - 100;
+      if (newTimeLeft <= 0) {
+        clearInterval(this.timerId);
+        this.timeLeft = 0;
+        emitAlertNoise();
+        return;
+      }
+
+      this.timeLeft = newTimeLeft;
     }, 100);
   }
 

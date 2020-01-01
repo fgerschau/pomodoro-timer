@@ -1,5 +1,14 @@
 import TimerStore from '../TimerStore';
 
+jest.useFakeTimers();
+
+jest.mock('../../utils', () => ({
+  emitAlertNoise: jest.fn(),
+}));
+
+const { emitAlertNoise } = require('../../utils');
+
+
 describe('TimerStore', () => {
   it('has correct default values and setters work', () => {
     const timer = new TimerStore();
@@ -18,7 +27,6 @@ describe('TimerStore', () => {
 
   it('starts, pauses, resumes and resets the timer', () => {
     const initialValue = 25 * 60 * 1000;
-    jest.useFakeTimers();
     const timer = new TimerStore();
     expect(timer.timeLeft).toBe(initialValue);
 
@@ -45,10 +53,26 @@ describe('TimerStore', () => {
   });
 
   it('doesn\'t show 60s', () => {
-    jest.useFakeTimers();
     const timer = new TimerStore();
     timer.startTimer();
     jest.advanceTimersByTime(100);
     expect(timer.timeLeftFormatted).toBe('25:00');
+  });
+
+  it('stops timer at 0', () => {
+    const timer = new TimerStore();
+    timer.startTimer();
+    jest.advanceTimersByTime(50 * 60 * 1000);
+    expect(timer.timeLeft).toBe(0);
+  });
+
+  it('emits a buzzing sound when time ends', () => {
+    const vibrateMock = jest.fn();
+    emitAlertNoise.mockImplementation(vibrateMock);
+    const timer = new TimerStore();
+    timer.startTimer();
+    jest.advanceTimersByTime(25 * 60 * 1000);
+    expect(vibrateMock).toHaveBeenCalledTimes(1);
+    jest.resetAllMocks();
   });
 });

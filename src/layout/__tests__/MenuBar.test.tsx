@@ -10,12 +10,22 @@ jest.mock('../../stores/useStores', () => ({
     pauseTimer: jest.fn(),
   })),
 }));
+jest.mock('../../utils', () => ({
+  initializeSound: jest.fn(),
+}));
+
 
 const { useTimerStore } = require('../../stores/useStores');
+const { initializeSound } = require('../../utils');
 
 describe('MenuBar component', () => {
   beforeEach(() => {
     jest.resetModules();
+    useTimerStore.mockImplementation(() => ({
+      running: false,
+      startTimer: jest.fn(),
+      pauseTimer: jest.fn(),
+    }));
   });
 
   it('renders the component', () => {
@@ -62,5 +72,13 @@ describe('MenuBar component', () => {
     const resetButtonElement = getByTestId(wrapper, 'menubar-reset-button');
     resetButtonElement.simulate('click');
     expect(resetTimerMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('should initialize sound when clicking on play', () => {
+    const initializeSoundMock = jest.fn();
+    initializeSound.mockImplementation(initializeSoundMock);
+    const wrapper = shallow(<MenuBar />);
+    getByTestId(wrapper, 'menubar-play-toggle').simulate('click');
+    expect(initializeSoundMock).toHaveBeenCalledTimes(1);
   });
 });

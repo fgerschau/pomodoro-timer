@@ -6,3 +6,5 @@ export function getByTestId<P = HTMLAttributes>(
 ): ShallowWrapper<P, any, any> {
   return wrapper.find(`[data-test-id="${id}"]`) as any as ShallowWrapper<P>;
 }
+
+export const flushPromises = () => new Promise(setImmediate);

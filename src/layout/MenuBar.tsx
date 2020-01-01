@@ -3,6 +3,7 @@ import { Toolbar, makeStyles, AppBar, Fab, Button } from '@material-ui/core';
 import { PlayArrow, Stop, RotateLeft } from '@material-ui/icons';
 import { useTimerStore } from '../stores/useStores';
 import { observer } from 'mobx-react';
+import { initializeSound } from '../utils';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -28,6 +29,7 @@ const MenuBar: FC = observer(() => {
   const classes = useStyles();
   const timer = useTimerStore();
   const toggleTimer = () => {
+    initializeSound();
     if (timer.running) {
       timer.pauseTimer();
     } else {
