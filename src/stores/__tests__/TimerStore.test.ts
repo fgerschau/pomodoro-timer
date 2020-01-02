@@ -39,7 +39,7 @@ describe('TimerStore', () => {
 
     timer.startTimer();
     dateNowMock.mockImplementation(() => initialValue + (2 * 60 * 1000));
-    jest.advanceTimersByTime(100);
+    jest.advanceTimersByTime(1000);
 
     expect(timer.running).toBe(true);
     expect(timer.timeLeftFormatted).toBe('23:00')
@@ -47,19 +47,19 @@ describe('TimerStore', () => {
 
     timer.pauseTimer();
     dateNowMock.mockImplementation(() => initialValue + (4 * 60 * 1000));
-    jest.advanceTimersByTime(100);
+    jest.advanceTimersByTime(1000);
     expect(timer.running).toBe(false);
     expect(timer.timeLeft).toBe(initialValue - 2 * 60 * 1000);
 
     timer.startTimer();
     dateNowMock.mockImplementation(() => initialValue + (6 * 60 * 1000));
-    jest.advanceTimersByTime(100);
+    jest.advanceTimersByTime(1000);
     expect(timer.running).toBe(true);
     expect(timer.timeLeft).toBe(initialValue - 4 * 60 * 1000);
 
     timer.resetTimer();
     dateNowMock.mockImplementation(() => initialValue + (8 * 60 * 1000));
-    jest.advanceTimersByTime(100);
+    jest.advanceTimersByTime(1000);
     expect(timer.running).toBe(false);
     expect(timer.timeLeft).toBe(initialValue);
   });
@@ -70,7 +70,7 @@ describe('TimerStore', () => {
     const timer = new TimerStore();
     timer.startTimer();
     dateNowMock.mockImplementation(() => 25100);
-    jest.advanceTimersByTime(100);
+    jest.advanceTimersByTime(1000);
     expect(timer.timeLeftFormatted).toBe('25:00');
   });
 
@@ -80,7 +80,7 @@ describe('TimerStore', () => {
     const timer = new TimerStore();
     timer.startTimer();
     dateNowMock.mockImplementation(() => 25 * 60 * 1000);
-    jest.advanceTimersByTime(100);
+    jest.advanceTimersByTime(1000);
     expect(timer.timeLeft).toBe(0);
   });
 
@@ -92,7 +92,7 @@ describe('TimerStore', () => {
     const timer = new TimerStore();
     timer.startTimer();
     dateNowMock.mockImplementation(() => 25 * 60 * 1000);
-    jest.advanceTimersByTime(100);
+    jest.advanceTimersByTime(1000);
     expect(vibrateMock).toHaveBeenCalledTimes(1);
     jest.resetAllMocks();
   });

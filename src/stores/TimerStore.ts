@@ -46,7 +46,7 @@ class TimerStore {
       }
 
       this.timeLeft = newTimeLeft;
-    }, 100);
+    }, 1000);
   }
 
   @action pauseTimer() {
