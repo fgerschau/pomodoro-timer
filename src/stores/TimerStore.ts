@@ -5,6 +5,7 @@ type ITimerState = 'break' | 'pomodoro';
 
 class TimerStore {
   private timerId: number = 0;
+  private timerStartDate: number = Date.now();
 
   @observable public timerState: ITimerState = 'pomodoro';
   @observable public pomodoroLength: number = 25 * 60 * 1000;
@@ -32,8 +33,11 @@ class TimerStore {
 
   @action startTimer() {
     this.running = true;
+    this.timerStartDate = Date.now();
+
     this.timerId = window.setInterval(() => {
-      const newTimeLeft = this.timeLeft - 100;
+      const newTimeLeft = this.timeLeft - (Date.now() - this.timerStartDate);
+      this.timerStartDate = Date.now();
       if (newTimeLeft <= 0) {
         clearInterval(this.timerId);
         this.timeLeft = 0;
@@ -48,6 +52,7 @@ class TimerStore {
   @action pauseTimer() {
     this.running = false;
     clearInterval(this.timerId);
+    this.timerStartDate = Date.now();
   }
 
   @action resetTimer(state?: ITimerState) {
