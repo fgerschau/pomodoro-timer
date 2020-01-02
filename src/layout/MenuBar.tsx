@@ -53,7 +53,6 @@ const MenuBar: FC = observer(() => {
         </Fab>
         <Button
           onClick={() => timer.resetTimer()}
-          color="secondary"
           className={classes.resetButton}
           data-test-id="menubar-reset-button"
         >
