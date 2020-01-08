@@ -106,4 +106,12 @@ describe('TimerStore', () => {
     expect(timer.timeLeft).toBe(25 * 60 * 1000);
     expect(timer.timerState).toBe('pomodoro');
   });
+
+  it('sets pomodoro and timer length', () => {
+    const timer = new TimerStore();
+    timer.setPomodoroLength(0);
+    expect(timer.pomodoroLength).toBe(0);
+    timer.setBreakLength(0);
+    expect(timer.breakLength).toBe(0);
+  });
 });

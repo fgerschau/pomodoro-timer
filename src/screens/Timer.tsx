@@ -38,10 +38,21 @@ const Timer: FC = observer(() => {
 
       <Box justifyContent="center" display="flex" className={classes.toolbar}>
         <Toolbar variant="dense">
-          <Button color="primary" variant="contained" data-test-id="timer-set-pomodoro" onClick={() => timer.resetTimer('pomodoro')}>
+          <Button
+            color="primary"
+            variant="contained"
+            data-test-id="timer-set-pomodoro"
+            onClick={() => timer.resetTimer('pomodoro')}
+          >
             Pomodoro
           </Button>
-          <Button color="primary" variant="contained" className={classes.secondButton} data-test-id="timer-set-break" onClick={() => timer.resetTimer('break')}>
+          <Button
+            color="primary"
+            variant="contained"
+            className={classes.secondButton}
+            data-test-id="timer-set-break"
+            onClick={() => timer.resetTimer('break')}
+          >
             Break
           </Button>
         </Toolbar>

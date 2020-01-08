@@ -19,6 +19,14 @@ class TimerStore {
     this.timeLeft = ms;
   }
 
+  @action setPomodoroLength(ms: number) {
+    this.pomodoroLength = ms;
+  }
+
+  @action setBreakLength(ms: number) {
+    this.breakLength = ms;
+  }
+
   @computed get timeLeftFormatted() {
     let minutes = Math.floor(this.timeLeft / 60 / 1000);
     let seconds = (this.timeLeft % 60000) / 1000;

@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import { Toolbar, makeStyles, AppBar, Fab, Button } from '@material-ui/core';
-import { PlayArrow, Stop, RotateLeft } from '@material-ui/icons';
+import { PlayArrow, Stop, RotateLeft, Settings, Home } from '@material-ui/icons';
 import { useTimerStore } from '../stores/useStores';
 import { observer } from 'mobx-react';
 import { initializeSound } from '../utils';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -25,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const MenuBar: FC = observer(() => {
+const MenuBar: FC<RouteComponentProps> = observer(({ history }) => {
   const classes = useStyles();
   const timer = useTimerStore();
   const toggleTimer = () => {
@@ -40,6 +41,21 @@ const MenuBar: FC = observer(() => {
   return (
     <AppBar position="fixed" color="primary" className={classes.appBar} data-test-id="app-wrapper">
       <Toolbar>
+        {
+          history.location.pathname.includes('settings') ?
+            <Button
+              data-test-id="menubar-home-link"
+              onClick={() => history.push('/')}
+            >
+              <Home titleAccess="Home" />
+            </Button>
+          : <Button
+            data-test-id="menubar-settings-link"
+            onClick={() => history.push('/settings')}
+          >
+            <Settings titleAccess="Settings"/>
+          </Button>
+        }
         <Fab
           onClick={toggleTimer}
           color="secondary"
@@ -64,4 +80,4 @@ const MenuBar: FC = observer(() => {
   );
 });
 
-export default MenuBar;
+export default withRouter(MenuBar);

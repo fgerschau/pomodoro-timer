@@ -2,12 +2,14 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Timer from './Timer';
+import Settings from './Settings';
 import { Container } from '@material-ui/core';
 
 const Routes = () => (
   <Container>
     <Switch>
-      <Route path='/' component={Timer} />
+      <Route path="/settings" component={Settings} />
+      <Route path="/" component={Timer} />
     </Switch>
   </Container>
 );
