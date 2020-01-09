@@ -7,7 +7,9 @@ deploy:
   secret_access_key:
     secure: KtgEpK68Nr2C62hx1UceRiGerpnZzkVdLGo486KE8kWontrl8s5CNzSqjRyaSnVTqoks4w9HTQu7KnM0wYj4TlqiCa+pRAgrgtGtbeemom0hlGW0foEvdZz1g1eDqOXi9aN2iNXOuNSU9M5nxJ2D6BisgulbalziT1x78w8FTDYFlNHCvF96J0knP+a/xgHABpv+XNTrfx5bJFtjoHmuMiyZJZUazA8/FRzVM8+2Pj7+VMxPMCkCegC5APaHrZAJ+Cnx3wKKQs8eyA/Qu0gk3l50tJvHMtbGamoAn4U+amU5rSGUcQG5blY8txJalxTQq7OFSTESA4kp9ca1rqyA1QZ/wNh8iKuG12HT0gYjV3pocExfxpot764k31DLvX+5MBNP9XOhoFOtIFOuYUnZv3ox26Ic4wsO+TbWMQLJnccN8wz2PwZSyevKI9CUQiENYktX1BMW3zZd3OaiPtApKczZPpceWQgzyQYapTCF6/cJZTJUqFRrSjl7fM4h7ePTLg8pNrz6ank2u+a5y7mBhLfOTcPaem/5fde+FElF1Dwn9NF/oF0noGX5BhLoiub7Y+8GUmVvYLYtQ6MEzi8KUmFS25RJzIbwR8wxHh+DRR1lr8HysjlBQXb/EVKP78llv91BD8jyFFnj410IF/7TKvnWJTSgyYSZWlF6+eIQ3vA=
   bucket: client.pomodoro-timer.app
-  acl: bucket_owner_full_control
+  region: eu-central-1
+  acl: public_read
   on:
     repo: fgerschau/pomodoro-timer
   skip_cleanup: true
+  local_dir: build
