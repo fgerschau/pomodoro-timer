@@ -1,6 +1,8 @@
 language: node_js
 node_js:
   - 12
+script:
+  - yarn build
 deploy:
   provider: s3
   access_key_id: AKIAUDBLEAVBCKTK2BOQ
