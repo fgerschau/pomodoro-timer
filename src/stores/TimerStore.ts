@@ -48,9 +48,7 @@ class TimerStore {
       const newTimeLeft = this.timeLeft - (Date.now() - this.timerStartDate);
       this.timerStartDate = Date.now();
       if (newTimeLeft <= 0) {
-        clearInterval(this.timerId);
-        this.timeLeft = 0;
-        this.running = false;
+        this.resetTimer();
         emitAlert();
         return;
       }

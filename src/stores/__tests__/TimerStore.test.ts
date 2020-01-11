@@ -77,14 +77,14 @@ describe('TimerStore', () => {
     expect(timer.timeLeftFormatted).toBe('25:00');
   });
 
-  it('stops timer at 0', () => {
+  it('stops timer at initial time', () => {
     const dateNowMock = jest.fn(() => 0);
     Date.now = dateNowMock;
     const timer = new TimerStore();
     timer.startTimer();
     dateNowMock.mockImplementation(() => 25 * 60 * 1000);
     jest.advanceTimersByTime(1000);
-    expect(timer.timeLeft).toBe(0);
+    expect(timer.timeLeft).toBe(25 * 60 * 1000);
   });
 
   it('emits a buzzing sound when time ends', () => {
@@ -129,9 +129,9 @@ describe('TimerStore', () => {
 
     dateNowMock.mockImplementation(() => 25 * 60 * 1000);
     jest.advanceTimersByTime(1000);
-    expect(timer.timeLeft).toBe(0);
     expect(timer.running).toBe(false);
 
+    timer.setMsLeft(0);
     timer.startTimer();
     expect(window.setInterval).toHaveBeenCalledTimes(1);
   });
