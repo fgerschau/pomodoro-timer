@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import {emitAlertNoise} from '../utils';
+import {emitAlert} from '../utils';
 
 type ITimerState = 'break' | 'pomodoro';
 
@@ -51,7 +51,7 @@ class TimerStore {
         clearInterval(this.timerId);
         this.timeLeft = 0;
         this.running = false;
-        emitAlertNoise();
+        emitAlert();
         return;
       }
 

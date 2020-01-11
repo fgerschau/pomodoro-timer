@@ -3,7 +3,7 @@ import { Toolbar, makeStyles, AppBar, Fab, Button } from '@material-ui/core';
 import { PlayArrow, Stop, RotateLeft, Settings, Home } from '@material-ui/icons';
 import { useTimerStore } from '../stores/useStores';
 import { observer } from 'mobx-react';
-import { initializeSound } from '../utils';
+import { initializeNotifications } from '../utils';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
@@ -27,14 +27,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const MenuBar: FC<RouteComponentProps> = observer(({ history }) => {
-  const [soundInitialized, setSoundInitialized] = React.useState(false);
+  const [initialized, setInitialized] = React.useState(false);
   const classes = useStyles();
   const timer = useTimerStore();
-  const toggleTimer = () => {
-    if (!soundInitialized) {
-      initializeSound();
-      setSoundInitialized(true);
+  const toggleTimer = async () => {
+    if (!initialized) {
+      initializeNotifications();
+      setInitialized(true);
     }
+
     if (timer.running) {
       timer.pauseTimer();
     } else {

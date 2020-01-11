@@ -1,10 +1,10 @@
 import TimerStore from '../TimerStore';
 
 jest.mock('../../utils', () => ({
-  emitAlertNoise: jest.fn(),
+  emitAlert: jest.fn(),
 }));
 
-const { emitAlertNoise } = require('../../utils');
+const { emitAlert } = require('../../utils');
 
 describe('TimerStore', () => {
   beforeEach(() => {
@@ -13,8 +13,8 @@ describe('TimerStore', () => {
 
     jest.useFakeTimers();
     Date.now = jest.fn();
-    emitAlertNoise.mockImplementation(() => ({
-      emitAlertNoise: jest.fn(),
+    emitAlert.mockImplementation(() => ({
+      emitAlert: jest.fn(),
     }));
   });
 
@@ -91,7 +91,7 @@ describe('TimerStore', () => {
     const dateNowMock = jest.fn(() => 0);
     Date.now = dateNowMock;
     const vibrateMock = jest.fn();
-    emitAlertNoise.mockImplementation(vibrateMock);
+    emitAlert.mockImplementation(vibrateMock);
     const timer = new TimerStore();
     timer.startTimer();
     dateNowMock.mockImplementation(() => 25 * 60 * 1000);

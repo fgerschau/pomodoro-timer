@@ -10,13 +10,13 @@ jest.mock('../../stores/useStores', () => ({
     pauseTimer: jest.fn(),
   })),
 }));
+
 jest.mock('../../utils', () => ({
-  initializeSound: jest.fn(),
+  initializeNotifications: jest.fn(),
 }));
 
-
 const { useTimerStore } = require('../../stores/useStores');
-const { initializeSound } = require('../../utils');
+const { initializeNotifications } = require('../../utils');
 
 const produceComponent = (historyPush?: Function, pathname?: string) => {
   const historyMock = historyPush ?? jest.fn();
@@ -86,11 +86,11 @@ describe('MenuBar component', () => {
   });
 
   it('should initialize sound when clicking on play', () => {
-    const initializeSoundMock = jest.fn();
-    initializeSound.mockImplementation(initializeSoundMock);
+    const initializeNotificationsMock = jest.fn();
+    initializeNotifications.mockImplementation(initializeNotificationsMock);
     const wrapper = produceComponent();
     getByTestId(wrapper, 'menubar-play-toggle').simulate('click');
-    expect(initializeSoundMock).toHaveBeenCalledTimes(1);
+    expect(initializeNotificationsMock).toHaveBeenCalledTimes(1);
   });
 
   it('should render the correct icon', () => {
@@ -119,8 +119,8 @@ describe('MenuBar component', () => {
     const useStateSpy = jest.spyOn(React, 'useState');
     const setStateMock = jest.fn();
     useStateSpy.mockImplementation((() => [false, setStateMock]) as any);
-    const initializeSoundMock = jest.fn();
-    initializeSound.mockImplementation(initializeSoundMock);
+    const initializeNotificationsMock = jest.fn();
+    initializeNotifications.mockImplementation(initializeNotificationsMock);
     let wrapper = produceComponent();
 
     getByTestId(wrapper, 'menubar-play-toggle').simulate('click');
@@ -131,6 +131,6 @@ describe('MenuBar component', () => {
     wrapper = produceComponent();
 
     getByTestId(wrapper, 'menubar-play-toggle').simulate('click');
-    expect(initializeSoundMock).toHaveBeenCalledTimes(1);
+    expect(initializeNotificationsMock).toHaveBeenCalledTimes(1);
   });
 });
