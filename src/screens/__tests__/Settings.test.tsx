@@ -113,4 +113,15 @@ describe('Settings component', () => {
 
     expect(getBreakLengthInput(wrapper).props().value).toBe('');
   });
+
+  it('should show a confirmation message when settings have been saved', () => {
+    let wrapper = shallow(<Settings />);
+    getForm(wrapper).simulate('submit', { preventDefault: jest.fn() });
+
+    expect(setStateMock).toHaveBeenCalledWith(true);
+    useStateSpy.mockImplementation(() => [true, setStateMock]);
+    wrapper = shallow(<Settings />);
+
+    expect(getByTestId(wrapper, 'settings-success-message').prop('open')).toBe(true);
+  });
 });

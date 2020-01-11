@@ -1,5 +1,5 @@
 import React, { FC, ChangeEvent, FormEvent } from 'react';
-import {Typography, makeStyles, TextField, Button} from '@material-ui/core';
+import {Typography, makeStyles, TextField, Button, Snackbar} from '@material-ui/core';
 import {useTimerStore} from '../stores/useStores';
 import {observer} from 'mobx-react';
 
@@ -25,6 +25,7 @@ interface ISettingsForm {
 }
 
 const Settings: FC = observer(() => {
+  const [showSuccess, setShowSuccess] = React.useState(false);
   const [pomodoroError, setPomodoroError] = React.useState<string>('');
   const [breakError, setBreakError] = React.useState<string>('');
 
@@ -74,6 +75,7 @@ const Settings: FC = observer(() => {
       timer.setPomodoroLength(form.pomodoroLength * 60 * 1000);
       timer.setBreakLength(form.breakLength * 60 * 1000);
       timer.resetTimer();
+      setShowSuccess(true);
     }
   };
 
@@ -129,6 +131,12 @@ const Settings: FC = observer(() => {
       >
         Version: {process.env.REACT_APP_VERSION}
       </Typography>
+      <Snackbar
+        open={showSuccess}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        message="Saved!"
+        data-test-id="settings-success-message"
+      />
     </div>
   );
 });
