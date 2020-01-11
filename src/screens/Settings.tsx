@@ -12,8 +12,12 @@ const useStyles = makeStyles(theme => ({
   },
   firstInput: {
     marginRight: theme.spacing(1),
-  }
-}))
+  },
+  version: {
+    position: 'absolute',
+    bottom: 100,
+  },
+}));
 
 interface ISettingsForm {
   pomodoroLength: number;
@@ -119,6 +123,12 @@ const Settings: FC = observer(() => {
           Submit
         </Button>
       </form>
+      <Typography
+        variant="body2"
+        className={classes.version}
+      >
+        Version: {process.env.REACT_APP_VERSION}
+      </Typography>
     </div>
   );
 });
