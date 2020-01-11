@@ -10,8 +10,8 @@ const useStyles = makeStyles(theme => ({
   header: {
     marginBottom: theme.spacing(2),
   },
-  breakInput: {
-    marginLeft: theme.spacing(1),
+  firstInput: {
+    marginRight: theme.spacing(1),
   }
 }))
 
@@ -84,6 +84,7 @@ const Settings: FC = observer(() => {
         data-test-id="settings-form"
       >
         <TextField
+          className={classes.firstInput}
           margin="normal"
           data-test-id="settings-pomodoro-length"
           label="Pomodoro time"
@@ -97,7 +98,6 @@ const Settings: FC = observer(() => {
           required
         />
         <TextField
-          className={classes.breakInput}
           margin="normal"
           data-test-id="settings-break-length"
           name="breakLength"
