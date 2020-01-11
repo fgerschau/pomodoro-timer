@@ -18,6 +18,7 @@ describe('Settings component', () => {
   const setBreakLengthMock = jest.fn();
   beforeEach(() => {
     jest.resetAllMocks();
+    setStateMock.mockReset();
     useStateSpy.mockImplementation((() => [{ pomodoroLength: 25, breakLength: 5 }, setStateMock]) as any);
     useTimerStore.mockImplementation(() => ({
       pomodoroLength: 25 * 60 * 1000,
@@ -99,5 +100,17 @@ describe('Settings component', () => {
 
     getForm(wrapper).simulate('submit', { preventDefault: jest.fn() });
     expect(setStateMock).toHaveBeenCalledWith('Value has to be > 0');
+  });
+
+  it('should be able to add empty value', () => {
+    let wrapper = shallow(<Settings />);
+
+    getBreakLengthInput(wrapper).simulate('change', { target: { value: '', name: 'breakLength' }, preventDefault: jest.fn() });
+    const expectedFormState = { pomodoroLength: 25, breakLength: '' };
+    expect(setStateMock).toHaveBeenCalledWith(expectedFormState);
+    useStateSpy.mockImplementation(() => [expectedFormState, setStateMock]);
+    wrapper = shallow(<Settings />);
+
+    expect(getBreakLengthInput(wrapper).props().value).toBe('');
   });
 });

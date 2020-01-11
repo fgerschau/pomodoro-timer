@@ -55,14 +55,14 @@ const Settings: FC = observer(() => {
     }
 
     const _form: any = { ...form };
-    _form[field] = parseInt(value, 10);
+    _form[field] = !isNaN(parseInt(value, 10)) ? parseInt(value, 10) : '';
     setForm(_form);
   };
 
   const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const pomodoroValueCorrect = form.pomodoroLength > 1;
-    const breakValueCorrect = form.breakLength > 1;
+    const pomodoroValueCorrect = form.pomodoroLength > 0;
+    const breakValueCorrect = form.breakLength > 0;
     setPomodoroError(pomodoroValueCorrect ? '' : 'Value has to be > 0');
     setBreakError(breakValueCorrect ? '' : 'Value has to be > 0');
 
