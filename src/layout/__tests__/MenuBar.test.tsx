@@ -114,4 +114,23 @@ describe('MenuBar component', () => {
     expect(historyMock).toHaveBeenCalledTimes(1);
     expect(historyMock).toHaveBeenCalledWith('/');
   });
+
+  it('should initialize the sound only once', () => {
+    const useStateSpy = jest.spyOn(React, 'useState');
+    const setStateMock = jest.fn();
+    useStateSpy.mockImplementation((() => [false, setStateMock]) as any);
+    const initializeSoundMock = jest.fn();
+    initializeSound.mockImplementation(initializeSoundMock);
+    let wrapper = produceComponent();
+
+    getByTestId(wrapper, 'menubar-play-toggle').simulate('click');
+    // set the state
+    expect(setStateMock).toHaveBeenCalledWith(true);
+    setStateMock.mockReset();
+    useStateSpy.mockImplementation(() => [true, setStateMock]);
+    wrapper = produceComponent();
+
+    getByTestId(wrapper, 'menubar-play-toggle').simulate('click');
+    expect(initializeSoundMock).toHaveBeenCalledTimes(1);
+  });
 });

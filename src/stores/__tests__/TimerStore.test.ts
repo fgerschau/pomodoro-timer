@@ -1,18 +1,21 @@
 import TimerStore from '../TimerStore';
 
-jest.useFakeTimers();
-
 jest.mock('../../utils', () => ({
   emitAlertNoise: jest.fn(),
 }));
 
 const { emitAlertNoise } = require('../../utils');
 
-jest.useFakeTimers();
 describe('TimerStore', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     jest.clearAllTimers();
+    jest.resetAllMocks();
+
+    jest.useFakeTimers();
     Date.now = jest.fn();
+    emitAlertNoise.mockImplementation(() => ({
+      emitAlertNoise: jest.fn(),
+    }));
   });
 
   it('has correct default values and setters work', () => {
@@ -113,5 +116,23 @@ describe('TimerStore', () => {
     expect(timer.pomodoroLength).toBe(0);
     timer.setBreakLength(0);
     expect(timer.breakLength).toBe(0);
+  });
+
+  it('does not start the timer if no time is left', () => {
+    const dateNowMock = jest.fn(() => 0);
+    Date.now = dateNowMock;
+    const timer = new TimerStore();
+    timer.startTimer();
+    timer.startTimer();
+    // should not start the timer twice
+    expect(window.setInterval).toHaveBeenCalledTimes(1)
+
+    dateNowMock.mockImplementation(() => 25 * 60 * 1000);
+    jest.advanceTimersByTime(1000);
+    expect(timer.timeLeft).toBe(0);
+    expect(timer.running).toBe(false);
+
+    timer.startTimer();
+    expect(window.setInterval).toHaveBeenCalledTimes(1);
   });
 });

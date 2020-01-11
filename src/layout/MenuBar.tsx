@@ -27,10 +27,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const MenuBar: FC<RouteComponentProps> = observer(({ history }) => {
+  const [soundInitialized, setSoundInitialized] = React.useState(false);
   const classes = useStyles();
   const timer = useTimerStore();
   const toggleTimer = () => {
-    initializeSound();
+    if (!soundInitialized) {
+      initializeSound();
+      setSoundInitialized(true);
+    }
     if (timer.running) {
       timer.pauseTimer();
     } else {

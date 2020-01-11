@@ -40,6 +40,7 @@ class TimerStore {
   }
 
   @action startTimer() {
+    if (this.timeLeft <=0 || this.running) return;
     this.running = true;
     this.timerStartDate = Date.now();
 
@@ -49,6 +50,7 @@ class TimerStore {
       if (newTimeLeft <= 0) {
         clearInterval(this.timerId);
         this.timeLeft = 0;
+        this.running = false;
         emitAlertNoise();
         return;
       }
