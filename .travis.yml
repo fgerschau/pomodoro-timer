@@ -2,6 +2,7 @@ language: node_js
 node_js:
   - 12
 script:
+  - npm version "$(cat package.json | jq -r '.version')-b$TRAVIS_BUILD_NUMBER"
   - yarn build
 deploy:
   provider: s3
