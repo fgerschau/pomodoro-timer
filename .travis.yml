@@ -5,6 +5,8 @@ script:
   - npm version "$(cat package.json | jq -r '.version')-b$TRAVIS_BUILD_NUMBER"
   - yarn build
 deploy:
+  on:
+    branch: master
   provider: s3
   access_key_id: AKIAUDBLEAVBCKTK2BOQ
   secret_access_key:
