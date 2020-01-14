@@ -7,7 +7,9 @@ const Screens: FC = () => {
   const [reloading, setReloading] = React.useState(false);
   const [showReload, setShowReload] = React.useState(false);
 
+  // istanbul ignore next
   useEffect(() => {
+    // istanbul ignore next
     timeout(3000).then(() => {
       (window as any).isUpdateAvailable?.then((isAvailable: boolean) => {
         if (!isAvailable) return;
@@ -19,10 +21,15 @@ const Screens: FC = () => {
   const reloadPage = () => {
     setReloading(true);
     (window as any).currentSW?.postMessage({ type: 'SKIP_WAITING' });
-    window.location.reload(true);
     setShowReload(false);
+
+    // istanbul ignore next - can't be implemented due to JSDOM
+    if (process.env.NODE_ENV !== 'test') {
+      window.location.reload(true);
+    }
   };
 
+  // istanbul ignore next
   return (
     <>
       <Snackbar
@@ -30,13 +37,14 @@ const Screens: FC = () => {
         message="A new version is available!"
         onClick={reloadPage}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        data-test-id="screens-new-version-snackbar"
         action={
           <Button
             color="inherit"
             size="small"
             onClick={reloadPage}
           >
-            {reloading ? <CircularProgress /> : 'Reload'}
+            {reloading ? <CircularProgress data-test-id="screens-loading-icon" /> : 'Reload'}
           </Button>
         }
       />
