@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Typography, makeStyles, Button, Toolbar, Box } from '@material-ui/core';
 import {observer} from 'mobx-react';
 import { useTimerStore } from '../stores/useStores';
+import LockScreen from '../components/LockScreen';
 
 const useStyles = makeStyles(theme => ({
   wrapper: {
@@ -20,7 +21,13 @@ const useStyles = makeStyles(theme => ({
   },
   toolbar: {
     marginTop: theme.spacing(2),
-  }
+  },
+  lockScreen: {
+    marginTop: theme.spacing(2),
+    margin: 'auto',
+    maxWidth: '300px',
+    padding: theme.spacing(1),
+  },
 }));
 
 const Timer: FC = observer(() => {
@@ -57,6 +64,10 @@ const Timer: FC = observer(() => {
           </Button>
         </Toolbar>
       </Box>
+
+      <div className={classes.lockScreen}>
+        <LockScreen />
+      </div>
     </div>
   );
 });
