@@ -3,6 +3,9 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import LockScreen from '../LockScreen';
 import { getByTestId } from '../../../__helpers__/helper';
 
+jest.mock('../../stores/useStores');
+const { useConfigStore } = require('../../stores/useStores');
+
 describe('LockScreen component', () => {
   const getLockOpen = (wrapper: ShallowWrapper) =>
     getByTestId(wrapper, 'lockscreen-lock-open');
@@ -12,27 +15,36 @@ describe('LockScreen component', () => {
     getByTestId(wrapper, 'lockscreen-toggle');
 
   it('renders the component', () => {
+    useConfigStore.mockImplementation(() => ({
+      toggleLock: jest.fn(),
+      locked: false,
+    }));
     const wrapper = shallow(<LockScreen />);
     expect(getLockOpen(wrapper).exists()).toBe(true);
   });
 
   it('locks the screen', () => {
-    const setStateMock = jest.fn();
-    const useStateSpy = jest.spyOn(React, 'useState');
-    useStateSpy.mockImplementation(() => [false, setStateMock]);
+    const lockScreenMock = jest.fn();
+    useConfigStore.mockImplementation(() => ({
+      toggleLock: lockScreenMock,
+      locked: false,
+    }));
 
     // lock
     let wrapper = shallow(<LockScreen />);
     getToggle(wrapper).simulate('click');
-    expect(setStateMock).toHaveBeenCalledWith(true);
-    setStateMock.mockReset();
+    expect(lockScreenMock).toHaveBeenCalledTimes(1);
+    lockScreenMock.mockReset();
 
-    useStateSpy.mockImplementation(() => [true, setStateMock]);
+    useConfigStore.mockImplementation(() => ({
+      toggleLock: lockScreenMock,
+      locked: true,
+    }));
     wrapper = shallow(<LockScreen />);
     expect(getLockClosed(wrapper).exists()).toBe(true);
 
     // unlock
     getToggle(wrapper).simulate('click');
-    expect(setStateMock).toHaveBeenCalledWith(false);
+    expect(lockScreenMock).toHaveBeenCalledTimes(1);
   });
 });

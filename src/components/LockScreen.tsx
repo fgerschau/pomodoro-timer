@@ -1,25 +1,27 @@
 import React, { FC } from 'react';
 import {LockOpen, Lock} from '@material-ui/icons';
 import {Button, Typography, Tooltip, useMediaQuery, useTheme} from '@material-ui/core';
+import {useConfigStore} from '../stores/useStores';
+import {observer} from 'mobx-react';
 
 const NoSleep: any = require('nosleep.js');
 
 const noSleep = new NoSleep();
 
-const LockScreen: FC = () => {
+const LockScreen: FC = observer(() => {
+  const configStore = useConfigStore();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
-  const [locked, setLocked] = React.useState(false);
   const lockScreenInfo = "Click the lock to prevent the screen from turning off. The alarm will only sound if the display is turned on.";
 
   const toggleLock = () => {
-    if (locked) {
+    if (configStore.locked) {
       noSleep.enable();
     } else {
       noSleep.disable();
     }
 
-    setLocked(!locked)
+    configStore.toggleLock();
   };
 
   return (
@@ -30,7 +32,7 @@ const LockScreen: FC = () => {
           onClick={toggleLock}
         >
           {
-            locked ?
+            configStore.locked ?
               <>
                 <Lock
                   data-test-id="lockscreen-lock-closed"
@@ -47,7 +49,7 @@ const LockScreen: FC = () => {
         </Button>
       </Tooltip>
       {
-        locked ?
+        configStore.locked ?
           <Typography variant="body1">The screen won't turn off.</Typography> :
           <Typography variant="body1">The screen will eventually turn off.</Typography>
       }
@@ -64,6 +66,6 @@ const LockScreen: FC = () => {
       }
     </>
   );
-}
+});
 
 export default LockScreen;
