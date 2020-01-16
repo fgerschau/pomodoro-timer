@@ -7,12 +7,10 @@ import MenuBar from '../layout/MenuBar';
 import theme from '../theme';
 import TimerStore from '../stores/TimerStore';
 import Screens from '../screens/Screens';
-import ConfigStore from '../stores/ConfigStore';
 
 const App: React.FC = () => {
   const stores = {
     timer: new TimerStore(),
-    config: new ConfigStore(),
   };
 
   return (
