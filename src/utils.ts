@@ -34,3 +34,10 @@ export const emitAlert = async () => {
   await timeout(2050);
   navigator.vibrate(1000);
 };
+
+export const getNumberFromLocalStorage = (key: string): number | undefined => {
+  const item = localStorage.getItem(key) as string;
+  const value = parseInt(item, 10);
+  if (isNaN(value)) return;
+  return value;
+};

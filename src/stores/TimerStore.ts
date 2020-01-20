@@ -1,18 +1,19 @@
 import { observable, action, computed } from 'mobx';
-import {emitAlert} from '../utils';
+import {emitAlert, getNumberFromLocalStorage} from '../utils';
 
 type ITimerState = 'break' | 'pomodoro';
+
+export const pomodoroLengthKey = 'pomodoro-length';
+export const breakLengthKey = 'break-length';
 
 class TimerStore {
   private timerId: number = 0;
   private timerStartDate: number = Date.now();
 
+  @observable public pomodoroLength: number = getNumberFromLocalStorage(pomodoroLengthKey) ?? 25 * 60 * 1000;
+  @observable public breakLength: number = getNumberFromLocalStorage(breakLengthKey) ?? 5 * 60 * 1000;
   @observable public timerState: ITimerState = 'pomodoro';
-  @observable public pomodoroLength: number = 25 * 60 * 1000;
-  @observable public breakLength: number = 5 * 60 * 1000;
-
   @observable public running: boolean = false;
-
   @observable public timeLeft: number = this.pomodoroLength;
 
   @action setMsLeft(ms: number) {
@@ -21,10 +22,12 @@ class TimerStore {
 
   @action setPomodoroLength(ms: number) {
     this.pomodoroLength = ms;
+    localStorage.setItem(pomodoroLengthKey, `${ms}`);
   }
 
   @action setBreakLength(ms: number) {
     this.breakLength = ms;
+    localStorage.setItem('break-length', `${ms}`);
   }
 
   @computed get timeLeftFormatted() {

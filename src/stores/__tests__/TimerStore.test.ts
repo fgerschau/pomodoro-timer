@@ -1,10 +1,11 @@
-import TimerStore from '../TimerStore';
+import TimerStore, {pomodoroLengthKey, breakLengthKey} from '../TimerStore';
 
 jest.mock('../../utils', () => ({
   emitAlert: jest.fn(),
+  getNumberFromLocalStorage: jest.fn(() => undefined),
 }));
 
-const { emitAlert } = require('../../utils');
+const { emitAlert, getNumberFromLocalStorage } = require('../../utils');
 
 describe('TimerStore', () => {
   beforeEach(() => {
@@ -16,6 +17,7 @@ describe('TimerStore', () => {
     emitAlert.mockImplementation(() => ({
       emitAlert: jest.fn(),
     }));
+    getNumberFromLocalStorage.mockImplementation(((key: string): number | undefined => undefined));
   });
 
   it('has correct default values and setters work', () => {
@@ -134,5 +136,21 @@ describe('TimerStore', () => {
     timer.setMsLeft(0);
     timer.startTimer();
     expect(window.setInterval).toHaveBeenCalledTimes(1);
+  });
+
+  it('should read and set pomodoro and break length to local storage', () => {
+    getNumberFromLocalStorage.mockImplementation((key: string): number | undefined => {
+      if (key === breakLengthKey) return 0;
+      if (key === pomodoroLengthKey) return 1;
+      return;
+    });
+    let timer = new TimerStore();
+    expect(timer.pomodoroLength).toBe(1);
+    expect(timer.breakLength).toBe(0);
+
+    getNumberFromLocalStorage.mockImplementation(() => undefined);
+    timer = new TimerStore();
+    expect(timer.pomodoroLength).toBe(25 * 60 * 1000);
+    expect(timer.breakLength).toBe(5 * 60 * 1000);
   });
 });

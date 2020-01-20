@@ -1,6 +1,9 @@
-import {initializeNotifications, emitAlert} from "../utils";
-import {flushPromises} from "../../__helpers__/helper";
+import {initializeNotifications, emitAlert, getNumberFromLocalStorage} from '../utils';
+import {flushPromises} from '../../__helpers__/helper';
 
+const mockGetItem = (returnValue: string) => {
+  localStorage.setItem('test', returnValue);
+};
 
 describe('utils file', () => {
   afterEach(() => {
@@ -67,5 +70,19 @@ describe('utils file', () => {
     (window as any).Notification = notificationMock;
     emitAlert();
     expect(notificationMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('should read an int from localstorage', () => {
+    mockGetItem('0')
+    expect(getNumberFromLocalStorage('test')).toBe(0);
+
+    mockGetItem('-1')
+    expect(getNumberFromLocalStorage('test')).toBe(-1);
+
+    mockGetItem('-0')
+    expect(getNumberFromLocalStorage('test')).toBe(-0);
+
+    mockGetItem('-')
+    expect(getNumberFromLocalStorage('test')).toBe(undefined);
   });
 });
