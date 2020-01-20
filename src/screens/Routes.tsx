@@ -6,7 +6,7 @@ import Settings from './Settings';
 import { Container } from '@material-ui/core';
 
 const Routes = () => (
-  <Container>
+  <Container style={{ paddingBottom: '100px' }}>
     <Switch>
       <Route path="/settings" component={Settings} />
       <Route path="/" component={Timer} />

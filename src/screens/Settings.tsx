@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
   firstInput: {
     marginRight: theme.spacing(1),
   },
-  version: {
+  footer: {
     position: 'absolute',
     bottom: 100,
   },
@@ -125,12 +125,16 @@ const Settings: FC = observer(() => {
           Submit
         </Button>
       </form>
-      <Typography
-        variant="body2"
-        className={classes.version}
-      >
-        Version: {process.env.REACT_APP_VERSION}
-      </Typography>
+      <div className={classes.footer}>
+        <Typography
+          variant="body2"
+        >
+          Version: {process.env.REACT_APP_VERSION}
+        </Typography>
+        <Typography variant="body2">
+          by <a href="https://github.com/fgerschau" target="_blank" rel="noopener noreferrer">Felix Gerschau</a> © 2020
+        </Typography>
+      </div>
       <Snackbar
         open={showSuccess}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
