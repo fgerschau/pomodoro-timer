@@ -26,7 +26,7 @@ describe('Timer component', () => {
     expect(getByTestId(wrapper, 'timer-timeleft').text()).toBe('0:00');
   });
 
-  it('sets the timer to pause', () => {
+  it('sets the timer to break', () => {
     const resetMock = jest.fn();
     useTimerStore.mockImplementation(() => ({
       resetTimer: resetMock,
@@ -50,5 +50,18 @@ describe('Timer component', () => {
     getByTestId(wrapper, 'timer-set-pomodoro').simulate('click');
     expect(resetMock).toHaveBeenCalledTimes(1);
     expect(resetMock).toHaveBeenCalledWith('pomodoro');
+  });
+
+  it('sets the timer to a long break', () => {
+    const resetMock = jest.fn();
+    useTimerStore.mockImplementation(() => ({
+      resetTimer: resetMock,
+      timeLeftFormatted: '0:00',
+    }));
+
+    const wrapper = produceComponent();
+    getByTestId(wrapper, 'timer-set-long-break').simulate('click');
+    expect(resetMock).toHaveBeenCalledTimes(1);
+    expect(resetMock).toHaveBeenCalledWith('long-break');
   });
 });

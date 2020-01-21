@@ -1,33 +1,39 @@
 import React, { FC, ChangeEvent, FormEvent } from 'react';
-import {Typography, makeStyles, TextField, Button, Snackbar} from '@material-ui/core';
+import {Typography, makeStyles, TextField, Button, Snackbar, Grid} from '@material-ui/core';
 import {useTimerStore} from '../stores/useStores';
 import {observer} from 'mobx-react';
 
 const useStyles = makeStyles(theme => ({
   wrapper: {
     marginTop: theme.spacing(7),
+    margin: 'auto',
   },
   header: {
     marginBottom: theme.spacing(2),
   },
-  firstInput: {
-    marginRight: theme.spacing(1),
+  inputContainer: {
+    flexGrow: 1,
+    maxWidth: '700px',
+  },
+  input: {
+    width: '100%',
   },
   footer: {
-    position: 'absolute',
-    bottom: 100,
+    marginTop: theme.spacing(3),
   },
 }));
 
 interface ISettingsForm {
   pomodoroLength: number;
   breakLength: number;
+  longBreakLength: number;
 }
 
 const Settings: FC = observer(() => {
   const [showSuccess, setShowSuccess] = React.useState(false);
   const [pomodoroError, setPomodoroError] = React.useState<string>('');
   const [breakError, setBreakError] = React.useState<string>('');
+  const [longBreakError, setLongBreakError] = React.useState<string>('');
 
   const classes = useStyles();
   const timer = useTimerStore();
@@ -35,6 +41,7 @@ const Settings: FC = observer(() => {
   const [form, setForm] = React.useState<ISettingsForm>({
     pomodoroLength: timer.pomodoroLength / (60 * 1000),
     breakLength: timer.breakLength / (60 * 1000),
+    longBreakLength: timer.longBreakLength / (60 * 1000),
   });
 
   const validateNumberInput = (value: string) =>
@@ -51,12 +58,14 @@ const Settings: FC = observer(() => {
 
       if (field === 'breakLength') {
         setBreakError('Invalid value');
+        setLongBreakError('Invalid value');
       }
 
       return;
     } else {
       setPomodoroError('');
       setBreakError('');
+      setLongBreakError('');
     }
 
     const _form: any = { ...form };
@@ -68,12 +77,15 @@ const Settings: FC = observer(() => {
     e.preventDefault();
     const pomodoroValueCorrect = form.pomodoroLength > 0;
     const breakValueCorrect = form.breakLength > 0;
+    const longBreakValueCorrect = form.longBreakLength > 0;
     setPomodoroError(pomodoroValueCorrect ? '' : 'Value has to be > 0');
     setBreakError(breakValueCorrect ? '' : 'Value has to be > 0');
+    setLongBreakError(longBreakValueCorrect ? '' : 'Value has to be > 0');
 
-    if (pomodoroValueCorrect && breakValueCorrect) {
+    if (pomodoroValueCorrect && breakValueCorrect && longBreakValueCorrect) {
       timer.setPomodoroLength(form.pomodoroLength * 60 * 1000);
       timer.setBreakLength(form.breakLength * 60 * 1000);
+      timer.setLongBreakLength(form.longBreakLength * 60 * 1000);
       timer.resetTimer();
       setShowSuccess(true);
     }
@@ -89,33 +101,56 @@ const Settings: FC = observer(() => {
         onSubmit={handleFormSubmit}
         data-test-id="settings-form"
       >
-        <TextField
-          className={classes.firstInput}
-          margin="normal"
-          data-test-id="settings-pomodoro-length"
-          label="Pomodoro time"
-          type="number"
-          value={form.pomodoroLength}
-          name="pomodoroLength"
-          onChange={handleInputChange}
-          variant="outlined"
-          helperText={pomodoroError}
-          error={!!pomodoroError}
-          required
-        />
-        <TextField
-          margin="normal"
-          data-test-id="settings-break-length"
-          name="breakLength"
-          onChange={handleInputChange}
-          label="Break time"
-          type="number"
-          value={form.breakLength}
-          variant="outlined"
-          helperText={breakError}
-          error={!!breakError}
-          required
-        />
+        <Grid className={classes.inputContainer} container spacing={2}>
+          <Grid item xs={12} md={4}>
+            <TextField
+              className={classes.input}
+              margin="normal"
+              data-test-id="settings-pomodoro-length"
+              label="Pomodoro"
+              type="number"
+              value={form.pomodoroLength}
+              name="pomodoroLength"
+              onChange={handleInputChange}
+              variant="outlined"
+              helperText={pomodoroError}
+              error={!!pomodoroError}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <TextField
+              className={classes.input}
+              margin="normal"
+              data-test-id="settings-break-length"
+              name="breakLength"
+              onChange={handleInputChange}
+              label="Short break"
+              type="number"
+              value={form.breakLength}
+              variant="outlined"
+              helperText={breakError}
+              error={!!breakError}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <TextField
+              className={classes.input}
+              margin="normal"
+              data-test-id="settings-long-break-length"
+              name="longBreakLength"
+              onChange={handleInputChange}
+              label="Long break"
+              type="number"
+              value={form.longBreakLength}
+              variant="outlined"
+              helperText={longBreakError}
+              error={!!longBreakError}
+              required
+            />
+          </Grid>
+        </Grid>
         <br />
         <Button
           color="primary"

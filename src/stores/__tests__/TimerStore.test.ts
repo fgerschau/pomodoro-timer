@@ -22,9 +22,14 @@ describe('TimerStore', () => {
 
   it('has correct default values and setters work', () => {
     const timer = new TimerStore();
+    // defaults
     expect(timer.timeLeft).toBe(25 * 60 * 1000);
+    expect(timer.longBreakLength).toBe(10 * 60 * 1000);
+    // setters
     timer.setMsLeft(0);
     expect(timer.timeLeft).toBe(0);
+    timer.setLongBreakLength(15 * 60 * 1000);
+    expect(timer.longBreakLength).toBe(15 * 60 * 1000);
   });
 
   it('formats the time left correctly', () => {
@@ -102,7 +107,7 @@ describe('TimerStore', () => {
     jest.resetAllMocks();
   });
 
-  it('sets the correct time (pause/pomodoro) when resetting timer', () => {
+  it('sets the correct time (long break/break/pomodoro) when resetting timer', () => {
     const timer = new TimerStore();
     timer.resetTimer('break');
     expect(timer.timeLeft).toBe(5 * 60 * 1000);
@@ -110,6 +115,9 @@ describe('TimerStore', () => {
     timer.resetTimer('pomodoro');
     expect(timer.timeLeft).toBe(25 * 60 * 1000);
     expect(timer.timerState).toBe('pomodoro');
+    timer.resetTimer('long-break');
+    expect(timer.timeLeft).toBe(10 * 60 * 1000);
+    expect(timer.timerState).toBe('long-break');
   });
 
   it('sets pomodoro and timer length', () => {

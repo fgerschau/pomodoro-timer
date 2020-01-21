@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { Typography, makeStyles, Button, Toolbar, Box, Slide } from '@material-ui/core';
+import { Typography, makeStyles, Button, Box, Slide, Grid } from '@material-ui/core';
 import {observer} from 'mobx-react';
 import { useTimerStore } from '../stores/useStores';
 
@@ -15,18 +15,16 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
     fontWeight: 'bold',
   },
-  secondButton: {
-    marginLeft: theme.spacing(2),
+  button: {
+    whiteSpace: 'nowrap',
+    width: '100%',
   },
   toolbar: {
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(8),
-  },
-  lockScreen: {
-    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(3),
+    flexGrow: 1,
+    maxWidth: '500px',
     margin: 'auto',
-    maxWidth: '300px',
-    padding: theme.spacing(1),
   },
   explanation: {
     marginTop: theme.spacing(5),
@@ -68,25 +66,41 @@ const Timer: FC = observer(() => {
       </Typography>
 
       <Box justifyContent="center" display="flex" className={classes.toolbar}>
-        <Toolbar variant="dense">
-          <Button
-            color="primary"
-            variant="contained"
-            data-test-id="timer-set-pomodoro"
-            onClick={() => timer.resetTimer('pomodoro')}
-          >
-            Pomodoro
-          </Button>
-          <Button
-            color="primary"
-            variant="contained"
-            className={classes.secondButton}
-            data-test-id="timer-set-break"
-            onClick={() => timer.resetTimer('break')}
-          >
-            Break
-          </Button>
-        </Toolbar>
+        <Grid container spacing={2} className={classes.toolbar}>
+          <Grid item xs md={4}>
+            <Button
+              color="primary"
+              variant="contained"
+              className={classes.button}
+              data-test-id="timer-set-pomodoro"
+              onClick={() => timer.resetTimer('pomodoro')}
+            >
+              Pomodoro
+            </Button>
+          </Grid>
+          <Grid item xs md={4}>
+            <Button
+              color="primary"
+              variant="contained"
+              className={classes.button}
+              data-test-id="timer-set-break"
+              onClick={() => timer.resetTimer('break')}
+            >
+              Short break
+            </Button>
+          </Grid>
+          <Grid item xs md={4}>
+            <Button
+              color="primary"
+              variant="contained"
+              className={classes.button}
+              data-test-id="timer-set-long-break"
+              onClick={() => timer.resetTimer('long-break')}
+            >
+              Long break
+            </Button>
+          </Grid>
+        </Grid>
       </Box>
       <Slide in={showExplanation} mountOnEnter unmountOnExit direction="up">
         <div>

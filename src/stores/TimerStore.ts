@@ -1,10 +1,11 @@
 import { observable, action, computed } from 'mobx';
 import {emitAlert, getNumberFromLocalStorage} from '../utils';
 
-type ITimerState = 'break' | 'pomodoro';
+type ITimerState = 'break' | 'long-break' | 'pomodoro';
 
 export const pomodoroLengthKey = 'pomodoro-length';
 export const breakLengthKey = 'break-length';
+export const longBreakLengthKey = 'long-break-length';
 
 class TimerStore {
   private timerId: number = 0;
@@ -12,6 +13,7 @@ class TimerStore {
 
   @observable public pomodoroLength: number = getNumberFromLocalStorage(pomodoroLengthKey) ?? 25 * 60 * 1000;
   @observable public breakLength: number = getNumberFromLocalStorage(breakLengthKey) ?? 5 * 60 * 1000;
+  @observable public longBreakLength: number = getNumberFromLocalStorage(longBreakLengthKey) ?? 10 * 60 * 1000;
   @observable public timerState: ITimerState = 'pomodoro';
   @observable public running: boolean = false;
   @observable public timeLeft: number = this.pomodoroLength;
@@ -27,7 +29,12 @@ class TimerStore {
 
   @action setBreakLength(ms: number) {
     this.breakLength = ms;
-    localStorage.setItem('break-length', `${ms}`);
+    localStorage.setItem(breakLengthKey, `${ms}`);
+  }
+
+  @action setLongBreakLength(ms: number) {
+    this.longBreakLength = ms;
+    localStorage.setItem(longBreakLengthKey, `${ms}`);
   }
 
   @computed get timeLeftFormatted() {
@@ -70,7 +77,18 @@ class TimerStore {
     this.running = false;
     clearInterval(this.timerId);
     this.timerState = state ?? this.timerState;
-    this.timeLeft = this.timerState === 'pomodoro' ? this.pomodoroLength : this.breakLength;
+
+    switch(this.timerState) {
+      case 'pomodoro':
+        this.timeLeft = this.pomodoroLength;
+        break;
+      case 'break':
+        this.timeLeft = this.breakLength;
+        break;
+      case 'long-break':
+        this.timeLeft = this.longBreakLength;
+        break;
+    }
   }
 }
 
