@@ -64,4 +64,33 @@ describe('Timer component', () => {
     expect(resetMock).toHaveBeenCalledTimes(1);
     expect(resetMock).toHaveBeenCalledWith('long-break');
   });
+
+  it('highlights the current state', () => {
+    useTimerStore.mockImplementation(() => ({
+      timeLeftFormatted: '0:00',
+      timerState: 'pomodoro',
+    }));
+    let wrapper = produceComponent();
+    expect(getByTestId(wrapper, 'timer-set-pomodoro').prop('variant')).toBe('contained');
+    expect(getByTestId(wrapper, 'timer-set-long-break').prop('variant')).toBe('outlined');
+    expect(getByTestId(wrapper, 'timer-set-break').prop('variant')).toBe('outlined');
+
+    useTimerStore.mockImplementation(() => ({
+      timeLeftFormatted: '0:00',
+      timerState: 'break',
+    }));
+    wrapper = produceComponent();
+    expect(getByTestId(wrapper, 'timer-set-break').prop('variant')).toBe('contained');
+    expect(getByTestId(wrapper, 'timer-set-pomodoro').prop('variant')).toBe('outlined');
+    expect(getByTestId(wrapper, 'timer-set-long-break').prop('variant')).toBe('outlined');
+
+    useTimerStore.mockImplementation(() => ({
+      timeLeftFormatted: '0:00',
+      timerState: 'long-break',
+    }));
+    wrapper = produceComponent();
+    expect(getByTestId(wrapper, 'timer-set-long-break').prop('variant')).toBe('contained');
+    expect(getByTestId(wrapper, 'timer-set-pomodoro').prop('variant')).toBe('outlined');
+    expect(getByTestId(wrapper, 'timer-set-break').prop('variant')).toBe('outlined');
+  });
 });

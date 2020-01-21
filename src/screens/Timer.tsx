@@ -70,7 +70,7 @@ const Timer: FC = observer(() => {
           <Grid item xs md={4}>
             <Button
               color="primary"
-              variant="contained"
+              variant={timer.timerState === 'pomodoro' ? 'contained' : 'outlined'}
               className={classes.button}
               data-test-id="timer-set-pomodoro"
               onClick={() => timer.resetTimer('pomodoro')}
@@ -81,7 +81,7 @@ const Timer: FC = observer(() => {
           <Grid item xs md={4}>
             <Button
               color="primary"
-              variant="contained"
+              variant={timer.timerState === 'break' ? 'contained' : 'outlined'}
               className={classes.button}
               data-test-id="timer-set-break"
               onClick={() => timer.resetTimer('break')}
@@ -92,7 +92,7 @@ const Timer: FC = observer(() => {
           <Grid item xs md={4}>
             <Button
               color="primary"
-              variant="contained"
+              variant={timer.timerState === 'long-break' ? 'contained' : 'outlined'}
               className={classes.button}
               data-test-id="timer-set-long-break"
               onClick={() => timer.resetTimer('long-break')}
