@@ -4,15 +4,15 @@ const bell = Audio ? new Audio() : null;
 
 // has to be called in an onClick function
 // as a workaround for safari
-export const initializeNotifications = () => {
-  // istanbul ignore next
-  if (bell) {
-    bell.play();
-    bell.src = '/zen-bell.mp3';
-  }
-
+export const initializeNotifications = async () => {
   if (window.Notification?.permission === 'default') {
     window.Notification?.requestPermission();
+  }
+
+  // istanbul ignore next
+  if (bell) {
+    await bell.play();
+    bell.src = '/zen-bell.mp3';
   }
 };
 
