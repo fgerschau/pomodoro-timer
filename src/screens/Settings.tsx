@@ -167,7 +167,7 @@ const Settings: FC = observer(() => {
           Version: {process.env.REACT_APP_VERSION}
         </Typography>
         <Typography variant="body2">
-          by <a href="https://github.com/fgerschau" target="_blank" rel="noopener noreferrer">Felix Gerschau</a> © 2020
+          by <a href="https://felixgerschau.com" target="_blank" rel="noopener noreferrer">Felix Gerschau</a> © 2020
         </Typography>
       </div>
       <Snackbar
