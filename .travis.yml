@@ -1,21 +1,32 @@
-language: node_js
-node_js:
-  - 12
-script:
-  - yarn test
-  - npm version "$(cat package.json | jq -r '.version')-b$TRAVIS_BUILD_NUMBER"
-  - yarn build
-deploy:
-  on:
-    branch: master
-  provider: s3
-  access_key_id: AKIAUDBLEAVBCKTK2BOQ
-  secret_access_key:
-    secure: KtgEpK68Nr2C62hx1UceRiGerpnZzkVdLGo486KE8kWontrl8s5CNzSqjRyaSnVTqoks4w9HTQu7KnM0wYj4TlqiCa+pRAgrgtGtbeemom0hlGW0foEvdZz1g1eDqOXi9aN2iNXOuNSU9M5nxJ2D6BisgulbalziT1x78w8FTDYFlNHCvF96J0knP+a/xgHABpv+XNTrfx5bJFtjoHmuMiyZJZUazA8/FRzVM8+2Pj7+VMxPMCkCegC5APaHrZAJ+Cnx3wKKQs8eyA/Qu0gk3l50tJvHMtbGamoAn4U+amU5rSGUcQG5blY8txJalxTQq7OFSTESA4kp9ca1rqyA1QZ/wNh8iKuG12HT0gYjV3pocExfxpot764k31DLvX+5MBNP9XOhoFOtIFOuYUnZv3ox26Ic4wsO+TbWMQLJnccN8wz2PwZSyevKI9CUQiENYktX1BMW3zZd3OaiPtApKczZPpceWQgzyQYapTCF6/cJZTJUqFRrSjl7fM4h7ePTLg8pNrz6ank2u+a5y7mBhLfOTcPaem/5fde+FElF1Dwn9NF/oF0noGX5BhLoiub7Y+8GUmVvYLYtQ6MEzi8KUmFS25RJzIbwR8wxHh+DRR1lr8HysjlBQXb/EVKP78llv91BD8jyFFnj410IF/7TKvnWJTSgyYSZWlF6+eIQ3vA=
-  bucket: client.pomodoro-timer.app
-  region: eu-central-1
-  acl: public_read
-  on:
-    repo: fgerschau/pomodoro-timer
-  skip_cleanup: true
-  local_dir: build
+env:
+  global:
+  - secure: H7SX7P0/oVNS9nBpB9rWvyq7viFdBbDE6yN72YvpRTTC+HrmD6PdRH4uFnDGDI1mH0ydnEMDw4uP0ue5cVmBSOjAq70U9YNhoWnJt6YTpUnQHs9MWyhN561ABQlB/AL4hfXC9UfsprMx/HZW+g9CdKJ0413YNte0EiIVZZdN+dxHQD199hrL56TmmF9vqF4RenaX32+j8cqhcdb5SCJqCt54FPYC5usZCp7Ba1QFmlrXysaRqz1yujtING8/YLaO1WTG5pXkP1Mro0bxZ0aJ+EQ1r8GPvtTUSjIbmf49lenTOlanYZVEjU5U4PzJRFra0Pd1A4t+i1bPEjwr0n2rmH9IQKAjAQvjGN6yeQRi6+QKcR/FhV9fsCzQiiinksW1ONyvFEonMGQTDNTHWv/k37WosL/ZTNJcSlReDeEcDXH27qkiMgv9df45fVSJJ1Dj8KHXUXuhZ5xS1SXB6ad620PQl9jAbvNDDmsYUeTveZGLRHzYBS5d7HH7571+guHX9LMNxERsV8rP6w0Bu9gDnMoDFGWOM3rtCnis+ga+SP9Zo0xwOzy1QUrL5K3RoyavCgkkqTU6/g21ZJRoEr9iINxUEJWColEH/7uLYcdr2b/BuwhB+FmYoUd+w7qPz0oXJ6m5SYSTFj8He2LjtIwricmQyi+OYc77Kr8Ju4yle1o=
+  - secure: ediipp+aaeHtvlsKuUhleQGeaXDy3ivQQ8X+apYm7tI2Zx709J1uHi2btjgOU9e8cy98oglIzYD6k7BcA2YgQIskImQDcN7gxmWmXhtF7X4hJYO2t+fzCJXGF3sRn3UoOAm/PiwIyIWNi3g3SLCqunM8JLac4kh2+bKyyn1AcHI0cKE2++eZJjcYIBdBDFr+IhCxUs7CZFMx2zkLQM6yTneeMHrhnuU828oZimMoUB8oHiUQOLlr3D+ynHSDyBTlvbDcXg/aqh/QOUKo1b/j9SAz0boNmQLISWhYsI90iw3wfJb/6ZuqtmxfvOH7ShuQiCMbxlv9t4kZmguc6Z6oTPFdw0aWAUYmBB328WMe6IF/Ilwz3rF13TpCs12ytJgB3/sFzkKSOxCqfAX520z/g1sg5mKBmmbfc7anqyUQthd0hdBJNTq/nP1Ze3MUCt3QFj3La1epy6yXTyqb3aH9dvYnJQnHzK56w1CtoLxdASwrm9vXdj4kFUnw5o3oNIzMQLcJv8D+4mj7Inr3M55Rd5FDCTPxtBd6WLJmBxRgjLBW7FHP59QtECHRCf5JU/R0WcZkiL22aRYpKnirO1p1+RR9dG/mZ82q2BhA2dcXqF7NYdQG2HAXBoG9/292s06vlxISfi0P3k/iYXUokV8sR9H4naDgzC2q4gKuubmWhGA=
+jobs:
+  include:
+    - stage: deploy
+      cache: yarn
+      language: node_js
+      node_js:
+      - 12
+      script:
+      - yarn test
+      - npm version "$(cat package.json | jq -r '.version')-b$TRAVIS_BUILD_NUMBER"
+      - yarn build
+      deploy:
+        on:
+          repo: fgerschau/pomodoro-timer
+        provider: s3
+        access_key_id: AKIAUDBLEAVBCKTK2BOQ
+        secret_access_key:
+          secure: KtgEpK68Nr2C62hx1UceRiGerpnZzkVdLGo486KE8kWontrl8s5CNzSqjRyaSnVTqoks4w9HTQu7KnM0wYj4TlqiCa+pRAgrgtGtbeemom0hlGW0foEvdZz1g1eDqOXi9aN2iNXOuNSU9M5nxJ2D6BisgulbalziT1x78w8FTDYFlNHCvF96J0knP+a/xgHABpv+XNTrfx5bJFtjoHmuMiyZJZUazA8/FRzVM8+2Pj7+VMxPMCkCegC5APaHrZAJ+Cnx3wKKQs8eyA/Qu0gk3l50tJvHMtbGamoAn4U+amU5rSGUcQG5blY8txJalxTQq7OFSTESA4kp9ca1rqyA1QZ/wNh8iKuG12HT0gYjV3pocExfxpot764k31DLvX+5MBNP9XOhoFOtIFOuYUnZv3ox26Ic4wsO+TbWMQLJnccN8wz2PwZSyevKI9CUQiENYktX1BMW3zZd3OaiPtApKczZPpceWQgzyQYapTCF6/cJZTJUqFRrSjl7fM4h7ePTLg8pNrz6ank2u+a5y7mBhLfOTcPaem/5fde+FElF1Dwn9NF/oF0noGX5BhLoiub7Y+8GUmVvYLYtQ6MEzi8KUmFS25RJzIbwR8wxHh+DRR1lr8HysjlBQXb/EVKP78llv91BD8jyFFnj410IF/7TKvnWJTSgyYSZWlF6+eIQ3vA=
+        bucket: client.pomodoro-timer.app
+        region: eu-central-1
+        acl: public_read
+        skip_cleanup: true
+        local_dir: build
+    - stage: webpagetest production
+      language: node_js
+      node_js:
+      - 12
+      script: 'node ./scripts/webpagetest.js'

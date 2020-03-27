@@ -54,6 +54,7 @@ const Timer: FC = observer(() => {
     setTimeout(() => {
       setShowExplanation(true);
     }, 500);
+    performance.mark('timer-screen');
   }, []);
 
   return (
