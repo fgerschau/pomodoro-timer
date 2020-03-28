@@ -16,8 +16,9 @@ const reportError = (err, id) => {
 const runTest = () => {
   return new Promise((resolve, reject) => {
     wpt.runTest(PUBLIC_URL, {
-      runs: 1,
-      firstViewOnly: false,
+      runs: 3,
+      location: 'ec2-eu-central-1',
+      firstViewOnly: true,
     }, (err, result) => {
       //console.log(err || result);
       if (result && result.data) {
