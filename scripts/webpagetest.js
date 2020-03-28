@@ -14,20 +14,8 @@ const reportError = (err, id) => {
 };
 
 const runTest = () => {
-  const customMetricsScript = `
-    [ttfrTimer]
-    var timerEntry = performance.getEntriesByName('timer-screen')[0];
-    if (timerEntry) {
-      return timerEntry.startTime;
-    }
-
-    return -1;
-  `;
-
   return new Promise((resolve, reject) => {
     wpt.runTest(PUBLIC_URL, {
-      customMetrics: customMetricsScript,
-      location: 'ec2-eu-central-1',
       runs: 1,
       firstViewOnly: false,
     }, (err, result) => {
@@ -65,13 +53,12 @@ const waitForResult = (testId) => {
 
           nDots = (nDots + 1) % 4;
           const dots = new Array(nDots + 1).join('.');
-          stdout.write('\033[35m' + result.statusText + dots + '\033[0m');
+          stdout.write('\033[35m' + '    ' + result.statusText + dots + '\033[0m');
         }
 
         if (result && result.statusCode === 200) {
           clearInterval(intervalId);
           console.log('\n');
-          console.clear();
           return resolve();
         }
 
@@ -118,12 +105,19 @@ const main = async () => {
       console.log('Final result:\n', util.inspect(finalResult, false, null, true));
     }
 
+    console.log('Summary:', finalResult.data.summary);
+    console.log('ID:', finalResult.data.id);
+    console.log('Location:', finalResult.data.location);
     const ttfrTimer =
       finalResult.data &&
       finalResult.data.average &&
       finalResult.data.average.firstView &&
-      finalResult.data.average.firstView.ttfrTimer;
-    console.log('\nTime to first render - Timer screen:', ttfrTimer);
+      finalResult.data.average.firstView['userTime.timer-screen'];
+    console.log('Time to first render - Timer screen: %sms', ttfrTimer);
+    // too slow, process failed
+    if (ttfrTimer > 1200) {
+      process.exit(1);
+    }
   } catch (e) {
     reportError(e, 'main');
   }
