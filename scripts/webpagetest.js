@@ -1,4 +1,5 @@
 const WebPageTest = require('webpagetest');
+const util = require('util');
 
 const PUBLIC_URL = 'https://pomodoro-timer.app';
 const wpt = new WebPageTest('https://www.webpagetest.org/', process.env.WPT_API_KEY);
@@ -19,6 +20,8 @@ const runTest = () => {
     if (timerEntry) {
       return timerEntry.startTime;
     }
+
+    return -1;
   `;
 
   return new Promise((resolve, reject) => {
@@ -111,7 +114,9 @@ const main = async () => {
     await waitForResult(testId);
     const finalResult = await getTestResult(testId)
 
-    console.log('Final result:\n', finalResult.toString());
+    if (isCI) {
+      console.log('Final result:\n', util.inspect(finalResult, false, null, true));
+    }
 
     const ttfrTimer =
       finalResult.data &&
