@@ -3,7 +3,7 @@ const WebPageTest = require('webpagetest');
 const PUBLIC_URL = 'https://pomodoro-timer.app';
 const wpt = new WebPageTest('https://www.webpagetest.org/', process.env.WPT_API_KEY);
 
-const isCI = process.env.CI == true;
+const isCI = process.env.CI;
 
 const reportError = (err, id) => {
   console.error('\x1b[31m%s\x1b[0m', `
