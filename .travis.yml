@@ -1,3 +1,10 @@
+language: node_js
+node_js:
+  - 12
+cache:
+  yarn: true
+  directories:
+    - node_modules
 env:
   global:
   - secure: H7SX7P0/oVNS9nBpB9rWvyq7viFdBbDE6yN72YvpRTTC+HrmD6PdRH4uFnDGDI1mH0ydnEMDw4uP0ue5cVmBSOjAq70U9YNhoWnJt6YTpUnQHs9MWyhN561ABQlB/AL4hfXC9UfsprMx/HZW+g9CdKJ0413YNte0EiIVZZdN+dxHQD199hrL56TmmF9vqF4RenaX32+j8cqhcdb5SCJqCt54FPYC5usZCp7Ba1QFmlrXysaRqz1yujtING8/YLaO1WTG5pXkP1Mro0bxZ0aJ+EQ1r8GPvtTUSjIbmf49lenTOlanYZVEjU5U4PzJRFra0Pd1A4t+i1bPEjwr0n2rmH9IQKAjAQvjGN6yeQRi6+QKcR/FhV9fsCzQiiinksW1ONyvFEonMGQTDNTHWv/k37WosL/ZTNJcSlReDeEcDXH27qkiMgv9df45fVSJJ1Dj8KHXUXuhZ5xS1SXB6ad620PQl9jAbvNDDmsYUeTveZGLRHzYBS5d7HH7571+guHX9LMNxERsV8rP6w0Bu9gDnMoDFGWOM3rtCnis+ga+SP9Zo0xwOzy1QUrL5K3RoyavCgkkqTU6/g21ZJRoEr9iINxUEJWColEH/7uLYcdr2b/BuwhB+FmYoUd+w7qPz0oXJ6m5SYSTFj8He2LjtIwricmQyi+OYc77Kr8Ju4yle1o=
@@ -5,10 +12,6 @@ env:
 jobs:
   include:
     - stage: deploy
-      cache: yarn
-      language: node_js
-      node_js:
-      - 12
       script:
       - yarn test
       - npm version "$(cat package.json | jq -r '.version')-b$TRAVIS_BUILD_NUMBER"
@@ -26,7 +29,4 @@ jobs:
         skip_cleanup: true
         local_dir: build
     - stage: webpagetest production
-      language: node_js
-      node_js:
-      - 12
       script: 'node ./scripts/webpagetest.js'
