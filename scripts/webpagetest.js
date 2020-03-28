@@ -116,7 +116,7 @@ const main = async () => {
       finalResult.data.average.firstView['userTime.timer-screen'];
     console.log('Time to first render - Timer screen: %sms', ttfrTimer);
     // too slow, process failed
-    if (ttfrTimer > 1200) {
+    if (ttfrTimer > 2200) {
       process.exit(1);
     }
   } catch (e) {
