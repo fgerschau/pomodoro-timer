@@ -102,7 +102,7 @@ const main = async () => {
     const finalResult = await getTestResult(testId)
 
     if (isCI) {
-      console.log('Final result:\n', util.inspect(finalResult, false, null, true));
+      console.log('Final result:\n', util.inspect(finalResult.data.average.firstView, false, null, true));
     }
 
     console.log('Summary:', finalResult.data.summary);
