@@ -1,7 +1,9 @@
 const WebPageTest = require('webpagetest');
 
-const PUBLIC_URL = 'https://pomdoro-timer.app';
+const PUBLIC_URL = 'https://pomodoro-timer.app';
 const wpt = new WebPageTest('https://www.webpagetest.org/', process.env.WPT_API_KEY);
+
+const isCI = process.env.CI === true;
 
 const reportError = (err, id) => {
   console.error('\x1b[31m%s\x1b[0m', `
@@ -40,18 +42,32 @@ const runTest = () => {
 const waitForResult = (testId) => {
   return new Promise((resolve, reject) => {
     let nDots = 1;
+    let interval = 1_000;
+    if (isCI) {
+      interval = 10_000;
+    }
     const intervalId = setInterval(() => {
       wpt.getTestStatus(testId, (err, result) => {
         if (result && result.statusCode !== 200) {
-          process.stdout.clearLine();
-          process.stdout.cursorTo(0)
+          const stdout = process.stdout;
+          if (isCI) {
+            stdout.clearLine();
+            stdout.cursorTo(0);
+          } else {
+            // print less often because lines can't be cleared
+            // in travis CI
+            console.log('\n');
+            interval = 10_000;
+          }
+
           nDots = (nDots + 1) % 4;
           const dots = new Array(nDots + 1).join('.');
-          process.stdout.write('\033[35m' + result.statusText + dots + '\033[0m');
+          stdout.write('\033[35m' + result.statusText + dots + '\033[0m');
         }
 
         if (result && result.statusCode === 200) {
           clearInterval(intervalId);
+          console.log('\n');
           console.clear();
           return resolve();
         }
@@ -62,7 +78,7 @@ const waitForResult = (testId) => {
           reject(err);
         }
       });
-    }, 1000);
+    }, interval);
   });
 };
 
@@ -94,11 +110,14 @@ const main = async () => {
     await waitForResult(testId);
     const finalResult = await getTestResult(testId)
 
-    if (finalResult.data && finalResult.data.average && finalResult.data.average.firstView){
-      console.log('Time to first render - Timer screen:', finalResult.data.average.firstView.ttfrTimer);
-    } else {
-      console.error('Result not valid\n', finalResult);
-    }
+    console.log('Final result:\n', finalResult.toString());
+
+    const ttfrTimer =
+      finalResult.data &&
+      finalResult.data.average &&
+      finalResult.data.average.firstView &&
+      finalResult.data.average.firstView.ttfrTimer;
+    console.log('\nTime to first render - Timer screen:', ttfrTimer);
   } catch (e) {
     reportError(e, 'main');
   }
