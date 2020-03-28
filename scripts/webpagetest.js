@@ -3,7 +3,7 @@ const WebPageTest = require('webpagetest');
 const PUBLIC_URL = 'https://pomodoro-timer.app';
 const wpt = new WebPageTest('https://www.webpagetest.org/', process.env.WPT_API_KEY);
 
-const isCI = process.env.CI === true;
+const isCI = process.env.CI == true;
 
 const reportError = (err, id) => {
   console.error('\x1b[31m%s\x1b[0m', `
@@ -50,7 +50,7 @@ const waitForResult = (testId) => {
       wpt.getTestStatus(testId, (err, result) => {
         if (result && result.statusCode !== 200) {
           const stdout = process.stdout;
-          if (isCI) {
+          if (!isCI) {
             stdout.clearLine();
             stdout.cursorTo(0);
           } else {
@@ -101,6 +101,7 @@ const main = async () => {
     console.log('\x1b[35m%s\x1b[0m', `
     Starting WebPageTest:
       URL: ${PUBLIC_URL}
+      CI: ${isCI}
     `);
 
     const result = await runTest();
