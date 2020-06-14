@@ -107,7 +107,15 @@ const Timer: FC = observer(() => {
         <div>
           <hr />
           <div className={classes.explanation}>
-            <Typography variant="h4">The process</Typography>
+            <Typography variant="h4">
+              The process
+            </Typography>
+            <Typography variant="h6">
+              (by&nbsp;
+              <a href="https://francescocirillo.com/pages/pomodoro-technique" target="_blank" rel="noopener noreferrer">
+                Francesco Cirillo
+              </a>)
+            </Typography>
             <Typography variant="body1" className={classes.explanationDetails} component="span">
               <p>1. Decide on the <Typography className={classes.strong} color="primary" component="span">task to be done.</Typography></p>
               <p>2. Set the <Typography className={classes.strong} color="primary" component="span">pomodoro timer</Typography> (traditionally to 25 minutes). </p>
