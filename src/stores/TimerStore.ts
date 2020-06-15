@@ -11,9 +11,9 @@ class TimerStore {
   private timerId: number = 0;
   private timerStartDate: number = Date.now();
 
-  @observable public pomodoroLength: number = getNumberFromLocalStorage(pomodoroLengthKey) ?? 25 * 60 * 1000;
-  @observable public breakLength: number = getNumberFromLocalStorage(breakLengthKey) ?? 5 * 60 * 1000;
-  @observable public longBreakLength: number = getNumberFromLocalStorage(longBreakLengthKey) ?? 10 * 60 * 1000;
+  @observable public pomodoroLength: number = 25 * 60 * 1000;
+  @observable public breakLength: number = 5 * 60 * 1000;
+  @observable public longBreakLength: number = 10 * 60 * 1000;
   @observable public timerState: ITimerState = 'pomodoro';
   @observable public running: boolean = false;
   @observable public timeLeft: number = this.pomodoroLength;
