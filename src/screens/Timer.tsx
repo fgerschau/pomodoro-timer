@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { Typography, makeStyles, Button, Box, Slide, Grid } from '@material-ui/core';
+import { Typography, makeStyles, Button, Slide, Grid } from '@material-ui/core';
 import {observer} from 'mobx-react';
 import { useTimerStore } from '../stores/useStores';
 
@@ -25,6 +25,8 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     maxWidth: '500px',
     margin: 'auto',
+    display: 'flex',
+    justifyContent: 'center',
   },
   explanation: {
     marginTop: theme.spacing(5),
@@ -66,7 +68,7 @@ const Timer: FC = observer(() => {
         {timer.timeLeftFormatted}
       </Typography>
 
-      <Box justifyContent="center" display="flex" className={classes.toolbar}>
+      <div className={classes.toolbar}>
         <Grid container spacing={2} className={classes.toolbar}>
           <Grid item xs md={4}>
             <Button
@@ -102,7 +104,7 @@ const Timer: FC = observer(() => {
             </Button>
           </Grid>
         </Grid>
-      </Box>
+      </div>
       <Slide in={showExplanation} mountOnEnter unmountOnExit direction="up">
         <div>
           <hr />

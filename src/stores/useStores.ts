@@ -9,7 +9,7 @@ interface IStores {
 }
 
 export const useStores = (): IStores =>
-  React.useContext(MobXProviderContext);
+  React.useContext(MobXProviderContext) as IStores;
 
 export const useTimerStore = (): TimerStore =>
   React.useContext(MobXProviderContext).timer;
